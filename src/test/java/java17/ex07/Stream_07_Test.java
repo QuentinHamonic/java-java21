@@ -1,10 +1,13 @@
 package java17.ex07;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -16,7 +19,8 @@ import java17.data.domain.Pizza;
  */
 public class Stream_07_Test {
 
-    // Voici une méthode qui exécute 10 fois un traitement et retourne le meilleur temps (le plus court)
+    // Voici une méthode qui exécute 10 fois un traitement et retourne le meilleur
+    // temps (le plus court)
     private long monitor(Runnable fn) {
 
         long fastest = Long.MAX_VALUE;
@@ -26,19 +30,21 @@ public class Stream_07_Test {
             fn.run();
             long end = System.nanoTime();
             long duration = (end - start) / 1_000_000;
-            if (duration < fastest) fastest = duration;
+            if (duration < fastest)
+                fastest = duration;
         }
         return fastest;
     }
 
     // TODO créer une fonction List<Pizza> -> List<Pizza>
     // TODO seules les pizzas ayant un prix >= 1000 sont conservées
-    Function<List<Pizza>, List<Pizza>> filterPizza = null;
+    Function<List<Pizza>, List<Pizza>> filterPizza = l -> l.stream().filter(p -> p.getPrice() >= 1000).toList();
 
     // TODO créer une fonction List<Pizza> -> List<Pizza>
     // TODO seules les pizzas ayant un prix >= 1000 sont conservées
     // TODO .parallel()
-    Function<List<Pizza>, List<Pizza>> parallelFilterPizza = null;
+    Function<List<Pizza>, List<Pizza>> parallelFilterPizza = l -> l.stream().parallel()
+            .filter(p -> p.getPrice() >= 1000).toList();
 
     // TODO exécuter le test pour visualiser le temps d'exécution
     @Test
@@ -50,7 +56,6 @@ public class Stream_07_Test {
     // De mon côté :
     // INFO: arrayList=21 ms
     // INFO: linkedList=21 ms
-
 
     // TODO exécuter le test pour visualiser le temps d'exécution
     @Test
